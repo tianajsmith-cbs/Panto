@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { cityCoordinates } from '../data/const'; // Import city coordinates
+import { cityCoordinates } from '../data/const'; // Importer bykoordinater
 
+{/* Skjermbilde for kart med pantestasjoner */} 
 export default function PantestasjonMapScreen() {
-    const selectedCity = "Oslo"; // Replace this with dynamic routing if needed
+    const selectedCity = "Oslo"; // Erstatt dette med dynamisk ruting hvis nødvendig
     const country = selectedCity
         ? Object.keys(cityCoordinates).find((key) =>
               cityCoordinates[key].hasOwnProperty(selectedCity)
@@ -15,9 +16,10 @@ export default function PantestasjonMapScreen() {
         ? cityCoordinates[country][selectedCity]
         : { latitude: 0, longitude: 0 };
 
+    // Funksjon for å generere tilfeldige pins rundt et senter
     const generateRandomPins = (center, numberOfPins) => {
         const pins = [];
-        const radius = 0.01; // Adjust radius for pin distribution
+        const radius = 0.01; // Juster radius for pin-distribusjon
 
         for (let i = 0; i < numberOfPins; i++) {
             const randomLat = center.latitude + (Math.random() - 0.5) * radius;
@@ -40,7 +42,7 @@ export default function PantestasjonMapScreen() {
                 </Text>
             </View>
 
-            {/* Map */}
+            {/* Kart */}
             <MapView
                 style={styles.map}
                 initialRegion={{

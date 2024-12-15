@@ -10,23 +10,26 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import { auth } from "../data/firebase"; // Import Firebase auth
+import { auth } from "../data/firebase"; // Importer Firebase auth
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 const AuthScreen = ({ navigation }) => {
+  // State-variabler for e-post, passord og feilmelding
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Funksjon for å håndtere brukerregistrering
   const handleSignUp = async () => {
     try {
+      // Opprett en ny bruker med e-post og passord
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User signed up:", userCredential.user);
-      setErrorMessage(""); // Clear error message
-      navigation.replace("Main"); // Navigate after successful sign-up
+      console.log("Bruker registrert:", userCredential.user);
+      setErrorMessage(""); // Tøm feilmeldingen
+      navigation.replace("Main"); // Naviger etter vellykket registrering
     } catch (error) {
-      console.error("Error signing up:", error.message);
-      setErrorMessage(error.message);
+      console.error("Feil ved registrering:", error.message);
+      setErrorMessage(error.message); // Sett feilmeldingen
     }
   };
 

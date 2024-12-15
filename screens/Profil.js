@@ -2,16 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { auth } from "../data/firebase"; // Import Firebase auth
 import { signOut } from "firebase/auth";
-import { useNavigation } from "@react-navigation/native"; // For navigation after logout
+import { useNavigation } from "@react-navigation/native"; // For navigasjonen av logg ut
 
+{/* Profilskjermen */}  // Profilskjermen er en enkel skjerm som viser brukerens navn, kreditter og en logg ut-knapp.
 const ProfileScreen = () => {
-    const navigation = useNavigation(); // Access navigation
+    const navigation = useNavigation(); // Hent navigasjonsfunksjonen
 
     const handleLogout = async () => {
         try {
             await signOut(auth);
             Alert.alert("Logget ut", "Du er nå logget ut.");
-            navigation.replace("Auth"); // Navigate back to the login/signup screen
+            navigation.replace("Auth"); // Naviger tilbake til login/signup-skjermen
         } catch (error) {
             Alert.alert("Feil", "Noe gikk galt under utlogging.");
             console.error("Error logging out:", error.message);

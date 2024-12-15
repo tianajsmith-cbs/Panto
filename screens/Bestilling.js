@@ -11,95 +11,104 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker"; // Date picker
-import MapView, { Marker } from "react-native-maps";
+import DateTimePicker from "@react-native-community/datetimepicker"; // Komponent for datovalg
+import MapView, { Marker } from "react-native-maps"; // Kartkomponent
 
 const Bestilling = () => {
-  const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [location, setLocation] = useState(null);
-  const [bottles, setBottles] = useState("");
-  const [glasses, setGlasses] = useState("");
+  // Tilstandshåndtering for dato, kartposisjon og brukerinput
+  const [date, setDate] = useState(new Date()); // Holder valgt dato
+  const [showDatePicker, setShowDatePicker] = useState(false); // Styrer visning av dato-velger
+  const [location, setLocation] = useState(null); // Holder valgt henteposisjon
+  const [bottles, setBottles] = useState(""); // Antall flasker som skal hentes
+  const [glasses, setGlasses] = useState(""); // Antall glass som skal hentes
 
+  // Håndterer valg av dato fra dato-velgeren
   const handleConfirmDate = (event, selectedDate) => {
-    setShowDatePicker(false);
+    setShowDatePicker(false); // Skjuler dato-velgeren
     if (selectedDate) {
-      setDate(selectedDate);
+      setDate(selectedDate); // Oppdaterer valgt dato
     }
   };
 
+  // Håndterer trykk på kartet for å sette en posisjon
   const handleMapPress = (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
-    setLocation({ latitude, longitude });
+    setLocation({ latitude, longitude }); // Oppdaterer posisjon
   };
 
+  // Håndterer innsending av bestilling
   const handleSubmitOrder = () => {
+    // Logger bestillingsinformasjonen til konsollen
     console.log("Order Submitted:");
     console.log("Date:", date.toDateString());
     console.log("Location:", location);
     console.log("Bottles:", bottles);
     console.log("Glasses:", glasses);
+    // Viser en bekreftelsesmelding til brukeren
     alert("Din bestilling er sendt!");
   };
 
   return (
+    // Gjør komponenten kompatibel med tastatur ved innskriving
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      {/* Dismisser tastaturet når brukeren trykker utenfor inputfeltene */}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView contentContainerStyle={styles.inner}>
+          {/* Tittel */}
           <Text style={styles.title}>Bestill Pant Henting</Text>
 
-          {/* Date Picker Section */}
+          {/* Seksjon for datovalg */}
           <TouchableOpacity
-            onPress={() => setShowDatePicker(true)}
+            onPress={() => setShowDatePicker(true)} // Viser dato-velgeren
             style={styles.datePickerButton}
           >
             <Text style={styles.datePickerText}>
-              {`Velg Dato: ${date.toDateString()}`}
+              {`Velg Dato: ${date.toDateString()}`} {/* Viser valgt dato */}
             </Text>
           </TouchableOpacity>
           {showDatePicker && (
             <DateTimePicker
               value={date}
-              mode="date"
+              mode="date" // Bruker dato-modus
               display="default"
-              onChange={handleConfirmDate}
+              onChange={handleConfirmDate} // Oppdaterer datoen når valgt
             />
           )}
 
-          {/* Input Section */}
+          {/* Inputfelter for antall flasker og glass */}
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
               placeholder="Antall Flasker"
-              keyboardType="numeric"
+              keyboardType="numeric" // Numerisk tastatur
               value={bottles}
-              onChangeText={setBottles}
-              onSubmitEditing={Keyboard.dismiss} // Dismiss keyboard after pressing Done
-              returnKeyType="done" // Change keyboard button to "Done"
+              onChangeText={setBottles} // Oppdaterer flasker
+              onSubmitEditing={Keyboard.dismiss} // Skjuler tastaturet
+              returnKeyType="done" // Endrer knappen til "Done"
             />
             <TextInput
               style={styles.input}
               placeholder="Antall Glass"
-              keyboardType="numeric"
+              keyboardType="numeric" // Numerisk tastatur
               value={glasses}
-              onChangeText={setGlasses}
-              onSubmitEditing={Keyboard.dismiss} // Dismiss keyboard after pressing Done
-              returnKeyType="done" // Change keyboard button to "Done"
+              onChangeText={setGlasses} // Oppdaterer glass
+              onSubmitEditing={Keyboard.dismiss} // Skjuler tastaturet
+              returnKeyType="done" // Endrer knappen til "Done"
             />
           </View>
 
-          {/* Submit Button */}
+          {/* Send bestilling-knapp */}
           <TouchableOpacity
             style={styles.submitButton}
-            onPress={handleSubmitOrder}
+            onPress={handleSubmitOrder} // Sender bestillingen
           >
             <Text style={styles.submitButtonText}>Send Bestilling</Text>
           </TouchableOpacity>
 
-          {/* Map Section */}
+          {/* Seksjon for kart */}
           <View style={styles.mapContainer}>
             <Text style={styles.subtitle}>
               Trykk på kartet for å sette en henteposisjon
@@ -107,16 +116,16 @@ const Bestilling = () => {
             <MapView
               style={styles.map}
               initialRegion={{
-                latitude: 59.911491,
+                latitude: 59.911491, // Startposisjon i Oslo
                 longitude: 10.757933,
                 latitudeDelta: 0.05,
                 longitudeDelta: 0.05,
               }}
-              onPress={handleMapPress}
+              onPress={handleMapPress} // Oppdaterer henteposisjon ved trykk
             >
               {location && (
                 <Marker
-                  coordinate={location}
+                  coordinate={location} // Viser valgt posisjon
                   title="Henteposisjon"
                   description="Dette er stedet hvor flaskene skal hentes"
                 />
@@ -129,14 +138,15 @@ const Bestilling = () => {
   );
 };
 
+// Stiler for komponenten
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "white", // Bakgrunnsfarge
   },
   inner: {
     flexGrow: 1,
-    padding: 20,
+    padding: 20, // Padding for innhold
   },
   title: {
     fontSize: 24,

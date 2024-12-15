@@ -14,10 +14,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white', // Change the background color as needed
+        backgroundColor: 'white', 
     },
     text: {
         fontSize: 20,
-        color: '#333', // Text color for the empty screen
+        color: '#333', 
     },
 });
