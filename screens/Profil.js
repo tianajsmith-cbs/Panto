@@ -1,121 +1,132 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { auth } from "../data/firebase"; // Import Firebase auth
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { auth } from "../data/firebase"; // Riktig import av Firebase-auth
 import { signOut } from "firebase/auth";
-import { useNavigation } from "@react-navigation/native"; // For navigasjonen av logg ut
+import { useNavigation } from "@react-navigation/native";
 
-{/* Profilskjermen */}  // Profilskjermen er en enkel skjerm som viser brukerens navn, kreditter og en logg ut-knapp.
 const ProfileScreen = () => {
-    const navigation = useNavigation(); // Hent navigasjonsfunksjonen
+  const [userData, setUserData] = useState(null);
+  const navigation = useNavigation();
+  const currentUser = auth.currentUser;
 
-    const handleLogout = async () => {
-        try {
-            await signOut(auth);
-            Alert.alert("Logget ut", "Du er nå logget ut.");
-            navigation.replace("Auth"); // Naviger tilbake til login/signup-skjermen
-        } catch (error) {
-            Alert.alert("Feil", "Noe gikk galt under utlogging.");
-            console.error("Error logging out:", error.message);
-        }
-    };
+  useEffect(() => {
+    if (!currentUser) return;
 
+    const db = getDatabase();
+    const userRef = ref(db, `users/${currentUser.uid}`);
+
+    const unsubscribe = onValue(userRef, (snapshot) => {
+      setUserData(snapshot.val());
+    });
+
+    return () => unsubscribe();
+  }, [currentUser]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigation.replace("Auth");
+    } catch (error) {
+      Alert.alert("Feil", "Kunne ikke logge ut.");
+    }
+  };
+
+  if (!userData) {
     return (
-        <View style={styles.container}>
-            {/* Header Section */}
-            <View style={styles.headerContainer}>
-                <Text style={styles.greeting}>GOD MORGEN, OLA</Text>
-                <TouchableOpacity style={styles.profileContainer}>
-                    <View style={styles.profileCircle} />
-                    <Text style={styles.profileName}>Ola Normann</Text>
-                    <Text style={styles.arrow}>{'>'}</Text>
-                </TouchableOpacity>
-            </View>
-
-            {/* Credits Section */}
-            <TouchableOpacity style={styles.creditsContainer} onPress={() => navigation.navigate("CreditsDetails")}>
-                <Text style={styles.creditsText}>Kreditter</Text>
-            <Text style={styles.creditsAmount}>x kr</Text>
-            </TouchableOpacity>
-
-
-            {/* Logout Button */}
-            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.logoutText}>Logg ut</Text>
-            </TouchableOpacity>
-        </View>
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Laster brukerdata...</Text>
+      </View>
     );
+  }
+
+  return (
+    <View style={styles.container}>
+      {/* Header */}
+      <Text style={styles.greeting}>GOD MORGEN, {userData.firstName?.toUpperCase()}</Text>
+
+      {/* Profilinfo */}
+      <TouchableOpacity style={styles.profileContainer}>
+        <View style={styles.profileCircle} />
+        <Text style={styles.profileName}>{userData.firstName} {userData.lastName}</Text>
+      </TouchableOpacity>
+
+
+      {/* Logout Button */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutText}>Logg ut</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-        paddingHorizontal: 20,
-        paddingTop: 50,
-    },
-    headerContainer: {
-        marginBottom: 20,
-    },
-    greeting: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#5b975b',
-        textAlign: 'left',
-    },
-    profileContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    profileCircle: {
-        width: 50,
-        height: 50,
-        backgroundColor: '#5b975b',
-        borderRadius: 25,
-    },
-    profileName: {
-        marginLeft: 10,
-        fontSize: 16,
-        color: '#5b975b',
-        fontWeight: 'bold',
-    },
-    arrow: {
-        marginLeft: 'auto',
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#5b975b',
-    },
-    creditsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-    },
-    creditsText: {
-        fontSize: 16,
-        color: '#5b975b',
-        fontWeight: 'bold',
-    },
-    creditsAmount: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#000',
-    },
-    logoutButton: {
-        marginTop: 30,
-        backgroundColor: '#e63946',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-    logoutText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 20,
+    paddingTop: 50,
+  },
+  greeting: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#5b975b",
+    marginBottom: 20,
+  },
+  profileContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    paddingBottom: 10,
+  },
+  profileCircle: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#5b975b",
+    borderRadius: 25,
+  },
+  profileName: {
+    marginLeft: 10,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#5b975b",
+  },
+  arrow: {
+    marginLeft: "auto",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#5b975b",
+  },
+
+  logoutButton: {
+    marginTop: 30,
+    backgroundColor: "#e6e8d8",
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  logoutText: {
+    color: "#5b975b",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#888",
+  },
 });
 
 export default ProfileScreen;
