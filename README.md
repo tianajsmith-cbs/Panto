@@ -1,13 +1,15 @@
-#Panto
+# Panto
 
 ## 📖 Introduction
-** PANTO  📱**
-Panto er en app som gjør det enklere for brukere å bestille henting av pant, finne nærmeste hentepunkt og velge hvordan pantebeløpet skal benyttes. Appen er fortsatt under utvikling og i en tidlig fase, med mange funksjoner som enda ikke er implementert.
+**PANTO 📱**
 
-Appen benytter for øyeblikket React Native, Firebase Authentication og Firebase Realtime Database for håndtering av brukere og data.
+Panto is an app that makes it easier for users to book bottle returns, find the nearest return point, and choose how the refund amount will be used. The app is still under development and in an early stage.
+
+Currently, the app uses React Native, Firebase Authentication, and Firebase Realtime Database for user and data management.
 
 ## Dependencies
 
+```json
 {
   "name": "listproject",
   "version": "1.0.0",
@@ -44,31 +46,25 @@ Appen benytter for øyeblikket React Native, Firebase Authentication og Firebase
   },
   "private": true
 }
-## Hvordan kjøre appen
 
-Følg disse stegene for å teste appen lokalt:
+**## How to Run the App**
+Follow these steps to test the app locally:
 
-Last ned koden:
+1. Download the Code:
+- Download the entire project as a zip file from this repository.
+- Open the file in Visual Studio Code.
 
-Last ned hele prosjektet som zip. fil fra denne repositorien.
-Åpne filen i Visual StudioCode
+2. Install Necessary Packages:
+- Run npm install to install the necessary packages.
 
-Installer nødvendige pakker: npm install
+3. Start the App:
+- Run npx expo start to start the app.
 
+4. Test the App on a Physical Device:
 
-Start appen: npx expo start
-
-
-Test appen på en fysisk enhet:
-
-Last ned Expo Go-appen på din iOS- eller Android-enhet.
-Skann QR-koden som vises i terminalen. 
+- Download the Expo Go app on your iOS or Android device.
+- Scan the QR code displayed in the terminal.
 
 ## Video Demo
-
-## Screenshots av appen
-
-
-
-
+## App Screenshots
 
