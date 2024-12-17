@@ -1,15 +1,15 @@
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import Bestilling from "../screens/PrivatScreens/Bestilling";
-import PantestasjonMapScreen from "../screens/FellesScreens/PanteKart";
-import BedriftMapScreen from "../screens/BedriftScreens/Bestillinger";
-import ProfileStack from "./ProfileStack";
-import Kalkulator from "../screens/PrivatScreens/Kalkulator";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"; // Importerer createBottomTabNavigator fra @react-navigation/bottom-tabs
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"; // Importerer Ionicons og MaterialCommunityIcons fra @expo/vector-icons
+import Bestilling from "../screens/PrivatScreens/Bestilling"; // Importerer Bestilling fra Bestilling.js
+import PantestasjonMapScreen from "../screens/FellesScreens/PanteKart"; // Importerer PantestasjonMapScreen fra PanteKart.js
+import BedriftMapScreen from "../screens/BedriftScreens/Bestillinger"; // Importerer BedriftMapScreen fra Bestillinger.js
+import ProfileStack from "./ProfileStack"; // Importerer ProfileStack fra ProfileStack.js
+import Kalkulator from "../screens/PrivatScreens/Kalkulator"; // Importerer Kalkulator fra Kalkulator.js
 
-const Tab = createBottomTabNavigator(); // Bottom Tab Navigator for BottomTabNavigator
+const Tab = createBottomTabNavigator(); 
 
-export default function BottomTabNavigator({ userType }) { // BottomTabNavigator function 
+export default function BottomTabNavigator({ userType }) { 
   return (
   
     <Tab.Navigator
@@ -37,7 +37,7 @@ export default function BottomTabNavigator({ userType }) { // BottomTabNavigator
         tabBarInactiveTintColor: "#777",
       })}
     >
-      {userType === "PRIVATPERSON" ? ( // If userType is PRIVATPERSON
+      {userType === "PRIVATPERSON" ? ( // If userType is PRIVATPERSON show Bestill and Pantolator, else show Bestillinger
         <>
           <Tab.Screen name="Bestill" component={Bestilling} /> 
           <Tab.Screen name="Pantolator" component={Kalkulator} />
@@ -45,7 +45,7 @@ export default function BottomTabNavigator({ userType }) { // BottomTabNavigator
       ) : (
         <Tab.Screen name="Bestillinger" component={BedriftMapScreen} /> 
       )}
-      <Tab.Screen name="Kart" component={PantestasjonMapScreen} /> // Show PantestasjonMapScreen
+      <Tab.Screen name="Kart" component={PantestasjonMapScreen} /> 
       <Tab.Screen name="Profil" component={ProfileStack} /> 
     </Tab.Navigator>
   );

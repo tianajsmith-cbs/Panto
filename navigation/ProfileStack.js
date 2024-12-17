@@ -1,12 +1,12 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import ProfileScreen from "../screens/FellesScreens/Profil";
-import EditProfile from "../screens/FellesScreens/EditProfile";
-import ReservationsScreen from "../screens/BedriftScreens/ReservationsScreen";
+import { createStackNavigator } from "@react-navigation/stack"; // Importerer createStackNavigator fra @react-navigation/stack
+import ProfileScreen from "../screens/FellesScreens/Profil"; // Importerer ProfileScreen fra Profil.js
+import EditProfile from "../screens/FellesScreens/EditProfile"; //  Importerer EditProfile fra EditProfile.js
+import ReservationsScreen from "../screens/BedriftScreens/ReservationsScreen"; // Importerer ReservationsScreen fra ReservationsScreen.js
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator(); // Stack Navigator for ProfileStack
 
-export default function ProfileStack() {
+export default function ProfileStack() { // Eksporterer ProfileStack
   return (
     <Stack.Navigator>
       <Stack.Screen
