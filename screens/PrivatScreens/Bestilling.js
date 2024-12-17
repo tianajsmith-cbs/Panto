@@ -12,32 +12,32 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Modal,
-} from "react-native"; // Importerer nødvendige komponenter fra React Native
-import * as Location from "expo-location"; // Importerer Location fra Expo
-import DateTimePicker from "@react-native-community/datetimepicker"; // Importerer DateTimePicker
-import MapView, { Marker } from "react-native-maps"; // Importerer MapView og Marker fra react-native-maps
-import { getDatabase, ref, push, get, set } from "firebase/database";  // Importerer funksjoner fra Firebase database
-import { auth } from "../../data/firebase"; // Importerer auth fra firebase.js
+} from "react-native";
+import * as Location from "expo-location";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import MapView, { Marker } from "react-native-maps";
+import { getDatabase, ref, push, get, set } from "firebase/database";
+import { auth } from "../../data/firebase";
 
-{/* Funksjonen Bestilling tar inn ingen parametre og returnerer JSX for en bestillingsskjerm */}
-const Bestilling = () => { 
-  const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [location, setLocation] = useState(null);
-  const [bottles, setBottles] = useState("");
-  const [glasses, setGlasses] = useState("");
-  const [loading, setLoading] = useState(true);
+// Komponent for å bestille henting av pant
+const Bestilling = () => {
+  const [date, setDate] = useState(new Date()); // Dato for henting
+  const [showDatePicker, setShowDatePicker] = useState(false); // Viser datepicker
+  const [location, setLocation] = useState(null); // Henteposisjon
+  const [bottles, setBottles] = useState(""); // Antall flasker
+  const [glasses, setGlasses] = useState(""); // Antall glass
+  const [loading, setLoading] = useState(true); // Laster lokasjon
+  const [donationOption, setDonationOption] = useState("self"); // "self" eller "charity"
 
- {/* useEffect kjører koden inni kun én gang når komponenten rendres */} 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync(); // Sjekker om appen har tilgang til lokasjon
       if (status !== "granted") {
         Alert.alert("Feil", "Tillatelse til lokasjon er nødvendig for å bruke kartet.");
         setLoading(false);
         return;
       }
-      const currentLocation = await Location.getCurrentPositionAsync({});
+      const currentLocation = await Location.getCurrentPositionAsync({}); // Henter gjeldende posisjon
       setLocation({
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
@@ -45,22 +45,22 @@ const Bestilling = () => {
       setLoading(false);
     })();
   }, []);
-{/* Funksjonen handleConfirmDate tar inn et event og en dato og oppdaterer datoen og skjuler datepickeren */}
-  const handleConfirmDate = (event, selectedDate) => { // Håndterer bekreftelse av valgt dato
-    setShowDatePicker(false); 
-    if (selectedDate) { // Sjekker om en dato er valgt
-      setDate(selectedDate); // Oppdaterer datoen
+
+  const handleConfirmDate = (event, selectedDate) => { // Håndterer valgt dato
+    setShowDatePicker(false);
+    if (selectedDate) {
+      setDate(selectedDate);
     }
   };
-{/* Funksjonen handleMapPress tar inn et event og oppdaterer lokasjonen til det punktet som er trykket på kartet */}
-  const handleMapPress = (event) => {  // Håndterer trykk på kartet
+
+  const handleMapPress = (event) => { // Håndterer trykk på kartet
     const { latitude, longitude } = event.nativeEvent.coordinate;
     setLocation({ latitude, longitude });
   };
-{/* Funksjonen fetchCurrentLocation henter den nåværende lokasjonen */}
-  const fetchCurrentLocation = async () => {
+
+  const fetchCurrentLocation = async () => { // Henter gjeldende posisjon på nytt
     try {
-      const currentLocation = await Location.getCurrentPositionAsync({}); // Henter nåværende lokasjon
+      const currentLocation = await Location.getCurrentPositionAsync({}); 
       setLocation({
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
@@ -71,50 +71,50 @@ const Bestilling = () => {
       setLocation({ latitude: 59.911491, longitude: 10.757933 });
     }
   };
-{/* Funksjonen handleSubmitOrder sender en bestilling til databasen */}
-  const handleSubmitOrder = () => {
+
+  const handleSubmitOrder = () => { // Sender bestilling
     if (!location || !bottles || !glasses) {
       Alert.alert("Feil", "Vennligst fyll ut alle feltene og velg en posisjon.");
       return;
     }
 
-    const db = getDatabase(); // Henter database-instansen
-    const currentUser = auth.currentUser; // Henter den innloggede brukeren
+    const db = getDatabase(); // Henter database referanse
+    const currentUser = auth.currentUser; // Henter gjeldende bruker
 
     if (!currentUser) {
-      Alert.alert("Feil", "Ingen bruker funnet. Vennligst logg inn igjen.");
+      Alert.alert("Feil", "Ingen bruker funnet. Vennligst logg inn igjen."); 
       return;
     }
- {/* Variabelen orderData inneholder dataene som skal lagres i databasen */}
-    const orderData = {
-      date: date.toDateString(), // Dato for bestilling
+
+    const orderData = { // Data for bestilling
+      date: date.toDateString(), // Dato for henting som tekst
       location, // Henteposisjon
-      bottles: parseInt(bottles, 10), // Konverterer til heltall
-      glasses: parseInt(glasses, 10), // Konverterer til heltall
-      userId: currentUser.uid, // Brukerens ID
+      bottles: parseInt(bottles, 10), // Antall flasker og glass som tall
+      glasses: parseInt(glasses, 10), 
+      donationOption, // Valgt donasjonsalternativ
+      userId: currentUser.uid, // Bruker-ID
       createdAt: new Date().toISOString(), // Opprettet dato og tid
     };
 
-    const ordersRef = ref(db, "orders/"); // Referanse til "orders"-tabellen
+    const ordersRef = ref(db, "orders/"); // Referanse til bestillinger i databasen
     const userStatsRef = ref(db, `stats/${currentUser.uid}`); // Referanse til brukerens statistikk
 
-    {/* Lagrer bestillingen i databasen */}
-    push(ordersRef, orderData) // Legger til bestillingen i databasen
+    push(ordersRef, orderData) // Lagrer bestillingen i databasen
       .then(() => {
         Alert.alert("Suksess", "Din bestilling er sendt!");
-        get(userStatsRef)
-          .then((snapshot) => { // Henter brukerens statistikk
-            const stats = snapshot.val() || { bottles: 0, glasses: 0 };  // Hvis ingen statistikk finnes, settes det til 0
-            const updatedStats = { // Oppdaterer statistikken
-              bottles: stats.bottles + orderData.bottles,
-              glasses: stats.glasses + orderData.glasses,
-            };
+        get(userStatsRef).then((snapshot) => {
+          const stats = snapshot.val() || { bottles: 0, glasses: 0 };
+          const updatedStats = {
+            bottles: stats.bottles + orderData.bottles,
+            glasses: stats.glasses + orderData.glasses,
+          };
 
-            return set(userStatsRef, updatedStats);
-          });
-        setBottles(""); // Nullstiller antall flasker
-        setGlasses(""); // Nullstiller antall glass
-        fetchCurrentLocation();   // Henter nåværende lokasjon
+          return set(userStatsRef, updatedStats);
+        });
+        setBottles("");
+        setGlasses("");
+        setDonationOption("self");
+        fetchCurrentLocation();
       })
       .catch((error) => {
         console.error("Feil ved lagring av bestilling:", error.message);
@@ -123,8 +123,7 @@ const Bestilling = () => {
   };
 
   return (
-    
-    <KeyboardAvoidingView  //
+    <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
@@ -176,6 +175,32 @@ const Bestilling = () => {
             />
           </View>
 
+          <View style={styles.donationContainer}>
+            <Text style={styles.subtitle}>Hva vil du gjøre med pantebeløpet?</Text>
+
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.optionButton,
+                  donationOption === "self" && styles.selectedOption,
+                ]}
+                onPress={() => setDonationOption("self")}
+              >
+                <Text style={styles.optionText}>Behold selv</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.optionButton,
+                  donationOption === "charity" && styles.selectedOption,
+                ]}
+                onPress={() => setDonationOption("charity")}
+              >
+                <Text style={styles.optionText}>Gi til veldedighet</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmitOrder}>
             <Text style={styles.submitButtonText}>Send Bestilling</Text>
           </TouchableOpacity>
@@ -222,6 +247,11 @@ const styles = StyleSheet.create({
   subtitle: { fontSize: 16, color: "#555", marginBottom: 10 },
   map: { flex: 1, borderRadius: 10 },
   loadingText: { textAlign: "center", marginTop: 20, fontSize: 16 },
+  donationContainer: { marginBottom: 20 },
+  buttonContainer: { flexDirection: "row", justifyContent: "space-between" },
+  optionButton: { flex: 1, padding: 10, backgroundColor: "#eaf5e3", borderRadius: 10, marginHorizontal: 5, alignItems: "center" },
+  selectedOption: { backgroundColor: "#56d141" },
+  optionText: { color: "#333", fontWeight: "bold" },
 });
 
 export default Bestilling;
