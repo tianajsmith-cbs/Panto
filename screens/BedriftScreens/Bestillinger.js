@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location"; 
 import { getDatabase, ref, onValue, update } from "firebase/database";
-import { auth } from "../data/firebase";
+import { auth } from "../../data/firebase";
 
 const BedriftMap = () => {
   const [orders, setOrders] = useState([]);
@@ -42,7 +42,7 @@ const BedriftMap = () => {
         return;
       }
 
-      const currentLocation = await Location.getCurrentPositionAsync({}); 
+      const currentLocation = await Location.getCurrentPositionAsync({});  // Hent brukerens lokasjon 
       setUserLocation({
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
@@ -50,8 +50,8 @@ const BedriftMap = () => {
       setLoading(false);
     };
 
-    fetchOrders();
-    fetchUserLocation();
+    fetchOrders(); // Hent bestillinger
+    fetchUserLocation(); // Hent brukerens lokasjon 
   }, []);
 
   const handleReserveOrder = (orderId) => { // Reserver bestilling

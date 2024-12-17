@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { getDatabase, ref, onValue } from "firebase/database";
-import { auth } from "../data/firebase"; 
+import { auth } from "../../data/firebase";
 import { signOut } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 
@@ -24,14 +24,15 @@ const ProfileScreen = () => { // Profilskjerm
     return () => unsubscribeUser();
   }, [currentUser]);
 
-  const handleLogout = async () => { // Logg ut bruker
+  const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigation.replace("Auth");
+      navigation.replace("AuthNavigator"); // Navigerer til AuthNavigator
     } catch (error) {
-      Alert.alert("Feil", "Kunne ikke logge ut.");
+      Alert.alert("Feil", "Kunne ikke logge ut."); 
     }
   };
+  
 
   const navigateToEditProfile = () => {
     navigation.navigate("EditProfile"); // Navigerer til redigeringsskjermen

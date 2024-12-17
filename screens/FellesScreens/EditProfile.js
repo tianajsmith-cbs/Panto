@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { getDatabase, ref, update, remove } from "firebase/database";
-import { auth } from "../data/firebase";
+import { auth } from "../../data/firebase";
 import { updatePassword, deleteUser } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 

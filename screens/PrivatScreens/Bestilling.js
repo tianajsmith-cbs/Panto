@@ -17,7 +17,7 @@ import * as Location from "expo-location"; // Importerer Location fra Expo
 import DateTimePicker from "@react-native-community/datetimepicker"; // Importerer DateTimePicker
 import MapView, { Marker } from "react-native-maps"; // Importerer MapView og Marker fra react-native-maps
 import { getDatabase, ref, push, get, set } from "firebase/database";  // Importerer funksjoner fra Firebase database
-import { auth } from "../data/firebase"; // Importerer auth fra firebase.js
+import { auth } from "../../data/firebase"; // Importerer auth fra firebase.js
 
 {/* Funksjonen Bestilling tar inn ingen parametre og returnerer JSX for en bestillingsskjerm */}
 const Bestilling = () => { 

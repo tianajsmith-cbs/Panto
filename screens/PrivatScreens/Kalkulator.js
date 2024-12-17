@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { auth } from "../data/firebase";
+import { auth } from "../../data/firebase";
 import { useNavigation } from '@react-navigation/native';
 
 

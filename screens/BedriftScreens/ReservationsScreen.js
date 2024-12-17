@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, Alert } from "react-native";
 import { getDatabase, ref, onValue } from "firebase/database";
-import { auth } from "../data/firebase";
+import { auth } from "../../data/firebase";
 
 const ReservationsScreen = () => {
   const [reservations, setReservations] = useState([]);
