@@ -1,30 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { auth } from "../data/firebase";
-import { useNavigation } from '@react-navigation/native'; // For navigasjon
+import { useNavigation } from '@react-navigation/native';
 
-export default function Kalkulator() {
+
+export default function Kalkulator() { 
     const [stats, setStats] = useState({ bottles: 0, glasses: 0 });
     const [orders, setOrders] = useState([]);
-    const navigation = useNavigation(); // Hook for navigasjon
-
-    useEffect(() => {
+    const [pantoCash, setPantoCash] = useState(0); 
+    const navigation = useNavigation();
+ 
+    useEffect(() => { // Hent brukerens statistikk og tidligere bestillinger
         const fetchStats = async () => {
-            const db = getDatabase();
-            const currentUser = auth.currentUser;
+            const db = getDatabase(); // Hent database
+            const currentUser = auth.currentUser; // Hent gjeldende bruker
 
-            if (!currentUser) {
+            if (!currentUser) { 
                 Alert.alert("Feil", "Ingen bruker funnet.");
                 return;
             }
 
+            // Hent brukerens statistikk
             const userStatsRef = ref(db, `stats/${currentUser.uid}`);
             onValue(userStatsRef, (snapshot) => {
                 const data = snapshot.val();
-                setStats(data || { bottles: 0, glasses: 0 });
+                const bottles = data?.bottles || 0;
+                const glasses = data?.glasses || 0;
+
+                setStats({ bottles, glasses });
+
+                // Kalkuler PantoCash
+                const totalPantoCash = bottles * 1 + glasses * 0.5;
+                setPantoCash(totalPantoCash);
             });
 
+            // Hent tidligere bestillinger
             const ordersRef = ref(db, `orders/${currentUser.uid}`);
             onValue(ordersRef, (snapshot) => {
                 const data = snapshot.val();
@@ -38,22 +49,25 @@ export default function Kalkulator() {
         fetchStats();
     }, []);
 
-    const totalItems = stats.bottles + stats.glasses;
-    const co2Saved = totalItems * 0.1;
-    const energySaved = totalItems * 2;
-    const phonesCharged = Math.round(energySaved / 5);
-    const ledHours = Math.round(energySaved / 10);
+    const totalItems = stats.bottles + stats.glasses; // Totalt antall pantede enheter
+    const co2Saved = totalItems * 0.1; // CO₂ spart per enhet
+    const energySaved = totalItems * 2; // Energi spart per enhet
+    const phonesCharged = Math.round(energySaved / 5); // Antall mobiltelefoner ladet
+    const ledHours = Math.round(energySaved / 10);//   
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Pantolatoren</Text>
+
             
+            {/* Totalt statistikk */}
             <View style={styles.statsContainer}>
                 <Text style={styles.statText}>Totalt pantede flasker: {stats.bottles}</Text>
                 <Text style={styles.statText}>Totalt pantede glass: {stats.glasses}</Text>
                 <Text style={styles.statText}>Totalt pantet: {totalItems} enheter</Text>
+                <Text style={styles.pantoCashText}>Din PantoCash: {pantoCash} poeng</Text>
             </View>
 
+            {/* Miljøbesparelser */}
             <View style={styles.environmentContainer}>
                 <Text style={styles.environmentTextBold}>
                     Du har spart omtrent {co2Saved.toFixed(1)} kg CO₂!
@@ -72,13 +86,15 @@ export default function Kalkulator() {
                 </View>
             </View>
 
+            {/* Naviger til "Bruk PantoCash"-siden */}
             <TouchableOpacity
                 style={styles.navigateButton}
                 onPress={() => navigation.navigate('CreditsDetails')} // Naviger til CreditsDetailsScreen
             >
-                <Text style={styles.navigateButtonText}>Se rabatter</Text>
+                <Text style={styles.navigateButtonText}>Bruk og tjen i PantoShop!</Text>
             </TouchableOpacity>
 
+            {/* Tidligere bestillinger */}
             {orders.map((order, index) => (
                 <View key={index} style={styles.orderContainer}>
                     <Text style={styles.orderDate}>{order.date}</Text>
@@ -102,13 +118,7 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: "white",
     },
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        textAlign: "center",
-        color: "#5b975b",
-        marginBottom: 20,
-    },
+   
     statsContainer: {
         marginBottom: 20,
     },
@@ -116,6 +126,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "#333",
         marginBottom: 8,
+    },
+    pantoCashText: {
+        fontSize: 18,
+        color: "#4A8C4B",
+        fontWeight: "bold",
     },
     environmentContainer: {
         backgroundColor: "#eaf5e3",
@@ -147,7 +162,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     navigateButton: {
-        backgroundColor: "#007BFF",
+        backgroundColor: "#56d141",
         padding: 15,
         borderRadius: 10,
         alignItems: "center",
@@ -178,3 +193,4 @@ const styles = StyleSheet.create({
         color: "#9c9c9c",
     },
 });
+

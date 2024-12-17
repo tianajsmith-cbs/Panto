@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome-ikoner
 
-const discounts = [
+const discounts = [ // Rabattkort
   {
     id: "1",
     title: "TalkMore",

@@ -9,54 +9,48 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"; // Import Firebase auth
-import { getDatabase, ref, onValue } from "firebase/database"; // Import for databasen
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
 
-
-const AuthScreen = ({ navigation }) => {
+const AuthScreen = ({ navigation }) => { 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const auth = getAuth(); // Hent Firebase auth-instansen
+  const auth = getAuth(); // Hent autentiseringsobjekt
 
- 
-  const handleSignIn = async () => {
-    if (!email || !password) {
+  const handleSignIn = async () => { // Logg inn bruker
+    if (!email || !password) { // Sjekk om e-post og passord er fylt ut
       Alert.alert("Feil", "Vennligst fyll inn både e-post og passord.");
       return;
     }
-  
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password); // Logg inn bruker
       const user = userCredential.user;
-  
+
       console.log("Bruker logget inn:", user.uid);
-  
-      const db = getDatabase();
-      const userRef = ref(db, `users/${user.uid}`);
-  
-      // Hent brukerdata for å bestemme brukerType
-      onValue(userRef, (snapshot) => {
-        const data = snapshot.val();
-  
-        console.log("BrukerType:", data?.userType);
-  
-        // Naviger til Main, der userType håndteres i BottomTabNavigator
-        navigation.replace("Main");
-      }, { onlyOnce: true }); // Sikrer at onValue bare kjører én gang
-  
-      setErrorMessage(""); // Nullstill feilmeldinger
+
+      const db = getDatabase(); // Hent database-instans
+      const userRef = ref(db, `users/${user.uid}`); //  Referanse til brukerens dokument
+
+      onValue( 
+        userRef,
+        (snapshot) => {
+          const data = snapshot.val(); // Hent brukerdata
+          console.log("BrukerType:", data?.userType); // Logg brukertype
+          navigation.replace("Main"); // Naviger til hovedskjermen
+        },
+        { onlyOnce: true }
+      );
+      setErrorMessage("");
     } catch (error) {
       console.error("Feil ved innlogging:", error.message);
       setErrorMessage("Feil ved innlogging: " + error.message);
     }
   };
-  
-  
 
-  const navigateToRegister = () => {
-    navigation.navigate("Register"); // Naviger til RegisterScreen
+  const navigateToRegister = () => { // Naviger til registreringsskjerm
+    navigation.navigate("Register");
   };
 
   return (
@@ -86,9 +80,11 @@ const AuthScreen = ({ navigation }) => {
           onChangeText={setPassword}
         />
         <TouchableOpacity onPress={handleSignIn} style={styles.loginButton}>
+          {/* Kjører handleSignIn ved trykk på knappen */}
           <Text style={styles.buttonText}>Logg Inn</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={navigateToRegister} style={styles.registerButton}>
+          {/* Navigerer til RegisterScreen ved trykk på knappen */}
           <Text style={styles.registerText}>Opprett bruker</Text>
         </TouchableOpacity>
         {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}

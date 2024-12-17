@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; // Import React, useState
 import {
   View,
   Text,
@@ -8,45 +8,50 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
-} from "react-native";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+} from "react-native"; // Import React, useState, View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Alert
+import { Picker } from "@react-native-picker/picker"; // Import Picker
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"; // Import createUserWithEmailAndPassword
+import { getDatabase, ref, set } from "firebase/database"; // Import getDatabase, ref, set
 
-const RegisterScreen = ({ navigation }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("PRIVATPERSON");
+const RegisterScreen = ({ navigation }) => { // Registreringsskjerm
+  const [firstName, setFirstName] = useState(""); // States for fornavn, etternavn, e-post og passord
+  const [lastName, setLastName] = useState(""); // States for fornavn, etternavn, e-post og passord
+  const [email, setEmail] = useState(""); // States for fornavn, etternavn, e-post og passord
+  const [password, setPassword] = useState(""); // States for fornavn, etternavn, e-post og passord
+  const [userType, setUserType] = useState("PRIVATPERSON"); // Brukertype
+  const [selectedCompany, setSelectedCompany] = useState(""); // Ny state for bedrift
 
-  const auth = getAuth();
-  const db = getDatabase();
+  const auth = getAuth(); // Hent autentiseringsobjekt
+  const db = getDatabase(); // Hent database-instans
 
-  const handleRegister = async () => {
-    if (!email || !password || !firstName || !lastName) {
+  {/* Opprett bruker */}
+  const handleRegister = async () => { 
+    if (!email || !password || !firstName || !lastName) { // Sjekk om alle felt er fylt ut
       Alert.alert("Feil", "Vennligst fyll inn alle feltene.");
       return;
     }
 
-    try {
-      // Opprett bruker i Firebase Authentication
+    if (userType === "BEDRIFT" && !selectedCompany) { // Sjekk om bedrift er valgt
+      Alert.alert("Feil", "Vennligst velg en bedrift."); 
+      return;
+    }
+
+    try { 
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Lagre data i Realtime Database
-      const userRef = ref(db, `users/${user.uid}`);
-      await set(userRef, {
-        firstName: firstName.trim(),
+      const userRef = ref(db, `users/${user.uid}`); // Referanse til brukerens dokument
+      await set(userRef, { // Opprett bruker
+        firstName: firstName.trim(), 
         lastName: lastName.trim(),
         email: email.trim(),
         userType: userType,
+        company: userType === "BEDRIFT" ? selectedCompany : null, // Legg til bedrift hvis bruker er bedrift
       });
 
-      console.log("Bruker opprettet og lagret i Realtime Database:", user.uid);
       Alert.alert("Suksess", "Bruker opprettet!");
       navigation.replace("Main");
     } catch (error) {
-      console.error("Feil ved opprettelse:", error.message);
       Alert.alert("Feil", error.message);
     }
   };
@@ -88,7 +93,7 @@ const RegisterScreen = ({ navigation }) => {
           value={password}
           onChangeText={setPassword}
         />
-
+    {/* Knapper for valg av brukertype */}
         <View style={styles.buttonRow}>
           <TouchableOpacity
             style={[
@@ -109,6 +114,23 @@ const RegisterScreen = ({ navigation }) => {
             <Text style={styles.optionText}>BEDRIFT</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Dropdown for bedrift */}
+        {userType === "BEDRIFT" && (
+          <View style={styles.pickerContainer}>
+            <Text style={styles.pickerLabel}>Velg bedrift:</Text>
+            <Picker
+              selectedValue={selectedCompany}
+              onValueChange={(itemValue) => setSelectedCompany(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Velg en bedrift..." value="" />
+              <Picker.Item label="PostNord" value="PostNord" />
+              <Picker.Item label="Posten" value="Posten" />
+              <Picker.Item label="Bring" value="Bring" />
+            </Picker>
+          </View>
+        )}
 
         <Text style={styles.selectionInfo}>
           {userType === "PRIVATPERSON"
@@ -183,6 +205,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
     marginBottom: 10,
+  },
+  pickerContainer: {
+    marginBottom: 20,
+  },
+  pickerLabel: {
+    fontSize: 14,
+    color: "#7D8B75",
+    marginBottom: 5,
+  },
+  picker: {
+    backgroundColor: "#f5f5f5",
+    borderRadius: 8,
   },
   registerButton: {
     backgroundColor: "#F6FDF5",

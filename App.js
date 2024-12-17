@@ -13,37 +13,64 @@ import RegisterScreen from "./screens/RegisterScreen";
 import Kalkulator from "./screens/Kalkulator";
 import PantestasjonMapScreen from "./screens/PanteKart";
 import ProfileScreen from "./screens/Profil";
+import EditProfile from "./screens/EditProfile";
 import Bestilling from "./screens/Bestilling";
 import BedriftMapScreen from "./screens/Bestillinger";
 import CreditsDetailsScreen from "./screens/Kreditter";
+import ReservationsScreen from "./screens/ReservationsScreen"; 
 
-const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+
+const Tab = createBottomTabNavigator(); // Bottom Tab Navigator
+const Stack = createStackNavigator(); // Stack Navigator
 
 // Pantolator Stack Navigator
 const PantolatorStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Pantolator"
+        name="Pantolatoren"
         component={Kalkulator}
-        options={{ headerShown: false }} // Skjuler headeren på hovedskjermen
+        options={{ headerShown: false }} // Hovedskjermen for Pantolator
       />
       <Stack.Screen
         name="CreditsDetails"
         component={CreditsDetailsScreen}
-        options={{ title: "Rabatter" }} // Viser header for rabattskjermen
+        options={{ title: "Rabatter" }} // Skjerm for rabatter
       />
     </Stack.Navigator>
   );
 };
 
-// Bottom Tab Navigator
-const BottomTabNavigator = ({ userType }) => {
+// Profile Stack Navigator
+const ProfileStack = () => {
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+    <Stack.Navigator>
+      <Stack.Screen
+        name="ProfileMain"
+        component={ProfileScreen}
+        options={{ headerShown: false }} // Hovedskjerm for profil
+      />
+      <Stack.Screen
+        name="Reservations"
+        component={ReservationsScreen}
+        options={{ title: "Dine Reservasjoner" }} // Skjerm for reservasjoner
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{ title: "Rediger Profil" }} // Skjerm for redigering av profil
+      />
+    </Stack.Navigator>
+  );
+};
+
+
+// Bottom Tab Navigator med brukertype som prop for å vise riktig skjermer for bruker 
+const BottomTabNavigator = ({ userType }) => { // Tar inn brukertype som prop
+  return ( // Returnerer Bottom Tab Navigator
+    <Tab.Navigator // Bottom Tab Navigator
+      screenOptions={({ route }) => ({ // Screen Options
+        tabBarIcon: ({ focused, color, size }) => { 
           let iconName;
           if (route.name === "Bestill") {
             iconName = focused ? "refresh-circle" : "refresh-circle-outline";
@@ -68,35 +95,34 @@ const BottomTabNavigator = ({ userType }) => {
         tabBarLabelStyle: { fontSize: 12, fontWeight: "bold" },
       })}
     >
-      {/* Visning basert på brukerens type */}
-      {userType === "PRIVATPERSON" ? (
+      {userType === "PRIVATPERSON" ? ( // Sjekk om bruker er privatperson eller bedrift
         <>
-          <Tab.Screen name="Bestill" component={Bestilling} />
+          <Tab.Screen name="Bestill" component={Bestilling} />  
           <Tab.Screen name="Pantolator" component={PantolatorStack} />
         </>
       ) : (
         <Tab.Screen name="Bestillinger" component={BedriftMapScreen} />
       )}
       <Tab.Screen name="Kart" component={PantestasjonMapScreen} />
-      <Tab.Screen name="Profil" component={ProfileScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Profil" component={ProfileStack} />
     </Tab.Navigator>
   );
 };
 
-export default function App() {
-  const [userType, setUserType] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  // Hent brukerdata fra Firebase
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      if (currentUser) {
-        const db = getDatabase();
-        const userRef = ref(db, `users/${currentUser.uid}`);
-        onValue(userRef, (snapshot) => {
-          const data = snapshot.val();
-          setUserType(data?.userType || "PRIVATPERSON"); // Standard: PRIVATPERSON
-          setLoading(false);
+export default function App() {
+  const [userType, setUserType] = useState(null); // Brukertype
+  const [loading, setLoading] = useState(true); // Laster inn
+
+  useEffect(() => { // Hent brukertype fra Firebase
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => { // Lytt etter endringer i autentisering
+      if (currentUser) { // Sjekk om bruker er logget inn
+        const db = getDatabase(); // Hent database
+        const userRef = ref(db, `users/${currentUser.uid}`); // Referanse til brukerens dokument
+        onValue(userRef, (snapshot) => { // Hent brukerdata
+          const data = snapshot.val(); // Hent data
+          setUserType(data?.userType || "PRIVATPERSON"); // Sett brukertype
+          setLoading(false); 
         });
       } else {
         setLoading(false);
@@ -113,14 +139,12 @@ export default function App() {
     );
   }
 
-  return (
-    <NavigationContainer>
+// Returnerer navigasjonskontaineren med stack navigator for autentisering og bottom tab navigator for hovedskjermer
+  return ( 
+    <NavigationContainer> 
       <Stack.Navigator>
-        {/* Logg inn skjerm */}
         <Stack.Screen name="Auth" component={AuthScreen} options={{ headerShown: false }} />
-        {/* Registreringsskjerm */}
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: "Opprett Bruker" }} />
-        {/* Hovedskjerm */}
         <Stack.Screen name="Main" options={{ headerShown: false }}>
           {() => <BottomTabNavigator userType={userType} />}
         </Stack.Screen>
