@@ -10,6 +10,7 @@ Currently, the app uses React Native, Firebase Authentication, and Firebase Real
 ## Dependencies
 
 ```json
+
 {
   "name": "listproject",
   "version": "1.0.0",
@@ -47,7 +48,10 @@ Currently, the app uses React Native, Firebase Authentication, and Firebase Real
   "private": true
 }
 
-**## How to Run the App**
+
+```
+
+## How to Run the App
 Follow these steps to test the app locally:
 
 1. Download the Code:
