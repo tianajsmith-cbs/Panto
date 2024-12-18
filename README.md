@@ -70,5 +70,6 @@ Follow these steps to test the app locally:
 - Scan the QR code displayed in the terminal.
 
 ## Video Demo
+https://youtu.be/jEsMPTHPSaA
 
 
