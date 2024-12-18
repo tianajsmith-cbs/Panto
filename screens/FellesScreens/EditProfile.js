@@ -57,7 +57,7 @@ const EditProfile = () => {
               await deleteUser(currentUser);  // Slett bruker fra Authentication
 
               Alert.alert("Suksess", "Brukerkontoen din er slettet.");
-              navigation.replace("Auth"); // Naviger til Auth-skjermen
+              navigation.replace("AuthNavigator"); // Naviger til Auth-skjermen
             } catch (error) {
               Alert.alert("Feil", "Kunne ikke slette brukerkontoen.");
               console.error("Sletting mislyktes:", error.message);
