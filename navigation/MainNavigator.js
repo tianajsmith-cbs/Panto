@@ -26,7 +26,7 @@ export default function MainNavigator() { // Eksporterer MainNavigator
         setLoading(false); // Sett lasting til false
       }
     });
-    return () => unsubscribe();
+    return () => unsubscribe(); // Avslutt lytting ved opprydding
   }, []);
 
   if (loading) {
@@ -45,7 +45,7 @@ export default function MainNavigator() { // Eksporterer MainNavigator
   );
 }
 
-const LoadingScreen = () => (
+const LoadingScreen = () => ( // Loading-skjerm
   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
     <Text>Laster inn...</Text>
   </View>

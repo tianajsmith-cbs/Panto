@@ -3,12 +3,12 @@ import { View, Text, FlatList, StyleSheet, Alert } from "react-native";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { auth } from "../../data/firebase";
 
-const ReservationsScreen = () => {
-  const [reservations, setReservations] = useState([]);
-  const currentUser = auth.currentUser;
+const ReservationsScreen = () => { // Reservasjoner
+  const [reservations, setReservations] = useState([]); // Bestillinger
+  const currentUser = auth.currentUser; // Gjeldende bruker
 
-  useEffect(() => {
-    if (!currentUser) return;
+  useEffect(() => { // Hent bestillinger reservert av brukeren
+    if (!currentUser) return; // Sjekk om bruker er logget inn
 
     const db = getDatabase();// Hent database
     const ordersRef = ref(db, "orders/"); // Referanse til bestillinger
@@ -23,10 +23,10 @@ const ReservationsScreen = () => {
       setReservations(reservedOrders); // Sett bestillinger
     });
 
-    return () => unsubscribe(); 
+    return () => unsubscribe();  // Avslutt lytting
   }, [currentUser]);
 
-  return (
+  return ( // Vis bestillinger
     <View style={styles.container}>
       <Text style={styles.title}>Dine Reservasjoner</Text>
       {reservations.length > 0 ? (
@@ -52,16 +52,44 @@ const ReservationsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFFFF", padding: 20 },
-  title: { fontSize: 24, fontWeight: "bold", color: "#5b975b", marginBottom: 20 },
-  reservationCard: {
-    backgroundColor: "#eaf5e3",
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
+  // Hovedcontainer for skjermen
+  container: {
+    flex: 1, // Fyller hele skjermen
+    backgroundColor: "#FFFFFF", // Hvit bakgrunnsfarge
+    padding: 20, // Indre mellomrom rundt innholdet
   },
-  cardText: { fontSize: 16, color: "#333" },
-  noReservations: { textAlign: "center", fontSize: 16, color: "#888" },
+
+  // Stil for overskriften
+  title: {
+    fontSize: 24, // Størrelse på teksten
+    fontWeight: "bold", // Fet skrift
+    color: "#5b975b", // Grønn tekstfarge
+    marginBottom: 20, // Avstand under overskriften
+  },
+
+  // Stil for kortene som viser reservasjoner
+  reservationCard: {
+    backgroundColor: "#eaf5e3", // Lysegrønn bakgrunnsfarge
+    padding: 15, // Indre mellomrom
+    borderRadius: 8, // Runde hjørner
+    marginBottom: 10, // Avstand mellom kortene
+  },
+
+  // Stil for teksten inne i reservasjonskortet
+  cardText: {
+    fontSize: 16, // Skriftstørrelse
+    color: "#333", // Mørk tekstfarge for god kontrast
+  },
+
+  // Stil for meldingen som vises når det ikke er noen reservasjoner
+  noReservations: {
+    textAlign: "center", // Sentralisert tekst
+    fontSize: 16, // Skriftstørrelse
+    color: "#888", // Grå tekstfarge for indikasjon
+  },
 });
+
+
+
 
 export default ReservationsScreen;

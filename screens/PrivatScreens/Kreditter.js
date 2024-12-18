@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome-ikoner
 
-const discounts = [ // Rabattkort
+const discounts = [ // Rabattkort med informasjon om rabattene som skal vises på skjermen
   {
     id: "1",
     title: "TalkMore",
@@ -61,23 +61,30 @@ const CreditsDetailsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  // Hovedcontainer
   container: {
     flexGrow: 1,
     backgroundColor: "white",
     padding: 10,
     alignItems: "center",
   },
+
+  // Overskrift
   title: {
     fontSize: 26,
     fontWeight: "bold",
     color: "#5b975b",
     marginBottom: 10,
   },
+
+  // Grid-layout for kortene
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
   },
+
+  // Kortstil
   card: {
     width: "48%",
     backgroundColor: "#f5f5f5",
@@ -85,8 +92,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     alignItems: "center",
-    elevation: 3, // Skyggeeffekt på Android
-    shadowColor: "#000", // Skyggeeffekt på iOS
+    elevation: 3, // Skyggeeffekt for Android
+    shadowColor: "#000", // Skyggeeffekt for iOS
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
@@ -107,6 +114,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
   },
+
+  // Knapper
   button: {
     backgroundColor: "#82B366",
     borderRadius: 5,
@@ -119,5 +128,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
 
 export default CreditsDetailsScreen;

@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; // Importerer React fra react
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"; // Importerer createBottomTabNavigator fra @react-navigation/bottom-tabs
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"; // Importerer Ionicons og MaterialCommunityIcons fra @expo/vector-icons
 import Bestilling from "../screens/PrivatScreens/Bestilling"; // Importerer Bestilling fra Bestilling.js

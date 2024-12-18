@@ -13,16 +13,16 @@ const ProfileScreen = () => { // Profilskjerm
   useEffect(() => {
     if (!currentUser) return;
  
-    const db = getDatabase(); // Hent database
-    const userRef = ref(db, `users/${currentUser.uid}`); // Referanse til brukerens dokument
+    const db = getDatabase(); // Hent database 
+    const userRef = ref(db, `users/${currentUser.uid}`); // Referanse til brukerens dokument 
 
     // Hent brukerdata
-    const unsubscribeUser = onValue(userRef, (snapshot) => {
-      setUserData(snapshot.val());
+    const unsubscribeUser = onValue(userRef, (snapshot) => { // Lytt etter endringer i brukerdata
+      setUserData(snapshot.val()); // Oppdater brukerdata 
     });
 
-    return () => unsubscribeUser();
-  }, [currentUser]);
+    return () => unsubscribeUser(); // Avslutt lytting ved opprydding 
+  }, [currentUser]); // Kjør effekten når currentUser endres (innlogging/utlogging) 
 
   const handleLogout = async () => {
     try {
@@ -34,12 +34,12 @@ const ProfileScreen = () => { // Profilskjerm
   };
   
 
-  const navigateToEditProfile = () => {
+  const navigateToEditProfile = () => {  
     navigation.navigate("EditProfile"); // Navigerer til redigeringsskjermen
   };
 
-  if (!userData) {
-    return (
+  if (!userData) { // Vis en loading-skjerm mens brukerdata lastes
+    return ( // Loading-skjerm
       <View style={styles.loadingContainer}>
         <Text style={styles.loadingText}>Laster brukerdata...</Text>
       </View>
@@ -58,8 +58,7 @@ const ProfileScreen = () => { // Profilskjerm
 
       {/* Profilinfo */}
       <View style={styles.profileSection}>
-        <TouchableOpacity style={styles.profileRow} onPress={navigateToEditProfile}>
-          <View style={styles.profileCircle} />
+        <TouchableOpacity style={styles.profileRow} onPress={navigateToEditProfile}> 
           <Text style={styles.profileName}>
             {userData.firstName} {userData.lastName}
           </Text>
@@ -68,7 +67,7 @@ const ProfileScreen = () => { // Profilskjerm
       </View>
 
         {/* Vis egne reservasjoner for bedriftsbrukere */}
-        {userData.userType === "BEDRIFT" && (
+        {userData.userType === "BEDRIFT" && ( // Sjekk om brukeren er en bedriftsbruker
         <>
             <Text style={styles.sectionTitle}>Se dine reservasjoner</Text>
             <TouchableOpacity
@@ -90,95 +89,130 @@ const ProfileScreen = () => { // Profilskjerm
 };
 
 const styles = StyleSheet.create({
+  // Hovedcontainer for skjermen
   container: {
-    flexGrow: 1,
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 20,
-    paddingTop: 50,
+    flexGrow: 1, // Gjør at innhold kan vokse utover tilgjengelig plass
+    backgroundColor: "#FFFFFF", // Hvit bakgrunnsfarge
+    paddingHorizontal: 20, // Horisontal padding for å skape plass på sidene
+    paddingTop: 50, // Vertikal padding på toppen
   },
+
+  // Container for headeren
   headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
+    flexDirection: "row", // Plasserer innhold i headeren horisontalt
+    justifyContent: "space-between", // Fordeler plass mellom elementene
+    alignItems: "center", // Sentrerer innholdet vertikalt
+    marginBottom: 20, // Avstand til neste element
   },
+
+  // Stil for velkomstteksten
   greeting: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#5b975b",
+    fontSize: 22, // Størrelse på teksten
+    fontWeight: "bold", // Fet skrift
+    color: "#5b975b", // Grønn tekstfarge
   },
+
+  // Stil for knapp rundt logoen
   logoButton: {
-    padding: 5,
+    padding: 5, // Padding rundt innholdet
   },
+
+  // Stil for tekst på logoen
   logoText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#5b975b",
+    fontSize: 18, // Størrelse på logo-teksten
+    fontWeight: "bold", // Fet skrift
+    color: "#5b975b", // Grønn tekstfarge
   },
+
+  // Seksjon for profildetaljer
   profileSection: {
-    marginBottom: 20,
+    marginBottom: 20, // Avstand til neste element
   },
+
+  // Rad for profilinformasjon
   profileRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderColor: "#ddd",
-    paddingBottom: 10,
+    flexDirection: "row", // Plasserer elementene horisontalt
+    alignItems: "center", // Sentrerer vertikalt
+    borderBottomWidth: 1, // Underlinje nederst
+    borderColor: "#ddd", // Grå farge på underlinjen
+    paddingBottom: 10, // Padding under innholdet
   },
+
+  // Sirkel for profilbilde
   profileCircle: {
-    width: 50,
-    height: 50,
-    backgroundColor: "#5b975b",
-    borderRadius: 25,
+    width: 50, // Bredde på sirkelen
+    height: 50, // Høyde på sirkelen
+    backgroundColor: "#5b975b", // Grønn bakgrunnsfarge
+    borderRadius: 25, // Gjør elementet til en sirkel
   },
+
+  // Navn på brukeren
   profileName: {
-    marginLeft: 10,
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-    flex: 1,
+    marginLeft: 10, // Avstand til venstre
+    fontSize: 18, // Størrelse på teksten
+    fontWeight: "bold", // Fet skrift
+    color: "#333", // Mørk grå tekstfarge
+    flex: 1, // Fyller tilgjengelig plass
   },
+
+  // Pilikon i profillinjen
   arrow: {
-    fontSize: 20,
-    color: "#5b975b",
+    fontSize: 20, // Størrelse på ikonet
+    color: "#5b975b", // Grønn farge
   },
+
+  // Tittel for hver seksjon
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#333",
+    fontSize: 18, // Størrelse på teksten
+    fontWeight: "bold", // Fet skrift
+    marginBottom: 10, // Avstand under teksten
+    color: "#333", // Mørk grå tekstfarge
   },
+
+  // Seksjon for reservasjoner
   reservationSection: {
-    backgroundColor: "#eaf5e3",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
+    backgroundColor: "#eaf5e3", // Lys grønn bakgrunn
+    padding: 15, // Padding rundt innholdet
+    borderRadius: 8, // Myke hjørner
+    alignItems: "center", // Sentrerer innhold horisontalt
   },
+
+  // Informasjonstekst
   infoText: {
-    fontSize: 14,
-    color: "#555",
+    fontSize: 14, // Størrelse på teksten
+    color: "#555", // Middels grå tekstfarge
   },
+
+  // Logg ut-knapp
   logoutButton: {
-    marginTop: 30,
-    backgroundColor: "#e6e8d8",
-    paddingVertical: 15,
-    borderRadius: 10,
-    alignItems: "center",
+    marginTop: 30, // Avstand til toppen
+    backgroundColor: "#e6e8d8", // Lys bakgrunnsfarge
+    paddingVertical: 15, // Vertikal padding
+    borderRadius: 10, // Myke hjørner
+    alignItems: "center", // Sentrerer tekst horisontalt
   },
+
+  // Tekst for logg ut-knappen
   logoutText: {
-    color: "#5b975b",
-    fontSize: 16,
-    fontWeight: "bold",
+    color: "#5b975b", // Grønn tekstfarge
+    fontSize: 16, // Størrelse på teksten
+    fontWeight: "bold", // Fet skrift
   },
+
+  // Container som vises under lasting
   loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1, // Fyller hele skjermen
+    justifyContent: "center", // Sentrerer vertikalt
+    alignItems: "center", // Sentrerer horisontalt
   },
+
+  // Tekst som vises under lasting
   loadingText: {
-    fontSize: 16,
-    color: "#888",
+    fontSize: 16, // Størrelse på teksten
+    color: "#888", // Lys grå tekstfarge
   },
 });
+
+
 
 export default ProfileScreen;

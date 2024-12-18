@@ -6,10 +6,10 @@ import { getDatabase, ref, onValue, update } from "firebase/database";
 import { auth } from "../../data/firebase";
 
 const BedriftMap = () => {
-  const [orders, setOrders] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [userLocation, setUserLocation] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState([]); // Bestillinger
+  const [selectedOrder, setSelectedOrder] = useState(null);   // Valgt bestilling
+  const [userLocation, setUserLocation] = useState(null); // Brukerens lokasjon
+  const [loading, setLoading] = useState(true); // Laster-status
 
   useEffect(() => { // Hent bestillinger og brukerens lokasjon
     const fetchOrders = () => { // Hent bestillinger
@@ -43,7 +43,7 @@ const BedriftMap = () => {
       }
 
       const currentLocation = await Location.getCurrentPositionAsync({});  // Hent brukerens lokasjon 
-      setUserLocation({
+      setUserLocation({ // Sett brukerens lokasjon
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
       });
@@ -57,7 +57,7 @@ const BedriftMap = () => {
   const handleReserveOrder = (orderId) => { // Reserver bestilling
     const currentUser = auth.currentUser; // Hent gjeldende bruker
 
-    if (!currentUser) {
+    if (!currentUser) {   // Sjekk om bruker er logget inn
       Alert.alert("Feil", "Du må logge inn for å reservere bestillinger.");
       return;
     }
@@ -69,11 +69,11 @@ const BedriftMap = () => {
       reserved: true, // Sett bestillingen som reservert
       reservedBy: currentUser.uid, // Sett bruker-ID
     })
-      .then(() => {
+      .then(() => {   // Håndter suksess
         Alert.alert("Suksess", "Bestillingen er reservert!");
         setSelectedOrder(null);
       })
-      .catch((error) => {
+      .catch((error) => { // Håndter feil
         console.error("Feil ved reservasjon:", error.message);
         Alert.alert("Feil", "Kunne ikke reservere bestillingen.");
       });
@@ -81,23 +81,23 @@ const BedriftMap = () => {
 
   return (
     <View style={styles.container}>
-      {!loading && userLocation ? (
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
+      {!loading && userLocation ? ( // Vis kart når lokasjon er lastet
+        <MapView // Kartkomponent
+          style={styles.map} // Stil for kartet
+          initialRegion={{ // Startposisjon
+            latitude: userLocation.latitude, // Brukerens breddegrad
+            longitude: userLocation.longitude, // Brukerens lengdegrad
+            latitudeDelta: 0.05, // Zoom-nivå for breddegrad
+            longitudeDelta: 0.05, // Zoom-nivå for lengdegrad
           }}
         >
           <Marker
-            coordinate={userLocation}
-            title="Din posisjon"
-            pinColor="blue"
+            coordinate={userLocation} // Marker for brukerens posisjon
+            title="Din posisjon" // Tittel på markøren
+            pinColor="blue" // Farge på markøren
           />
-          {orders.map((order) => (
-            <Marker
+          {orders.map((order) => ( // Vis bestillinger som markører
+            <Marker 
               key={order.id}
               coordinate={{
                 latitude: order.latitude,
@@ -114,7 +114,7 @@ const BedriftMap = () => {
         <Text style={styles.loadingText}>Laster kart...</Text>
       )}
 
-      {selectedOrder && !selectedOrder.reserved && (
+      {selectedOrder && !selectedOrder.reserved && ( // Vis bestillingsdetaljer
         <View style={styles.orderDetails}>
           <Text style={styles.detailsText}>
             Flasker: {selectedOrder.bottles}, Glass: {selectedOrder.glasses}
@@ -132,27 +132,57 @@ const BedriftMap = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  map: { flex: 1 },
+  // Hovedcontainer for skjermen
+  container: {
+    flex: 1, // Fyller hele skjermens høyde
+  },
+
+  // Stil for kartkomponenten
+  map: {
+    flex: 1, // Fyller hele tilgjengelige plassen
+  },
+
+  // Stil for detaljkortet som vises over kartet
   orderDetails: {
-    position: "absolute",
-    bottom: 20,
-    left: 20,
-    right: 20,
-    backgroundColor: "white",
-    padding: 15,
-    borderRadius: 10,
-    elevation: 5,
+    position: "absolute", // Plasserer kortet over kartet
+    bottom: 20, // Plasserer det 20 enheter fra bunnen av skjermen
+    left: 20, // Avstand fra venstre side
+    right: 20, // Avstand fra høyre side
+    backgroundColor: "white", // Hvit bakgrunn
+    padding: 15, // Indre mellomrom
+    borderRadius: 10, // Runde hjørner
+    elevation: 5, // Skyggeeffekt (Android)
   },
-  detailsText: { fontSize: 16, marginBottom: 5 },
+
+  // Stil for tekst i detaljkortet
+  detailsText: {
+    fontSize: 16, // Skriftstørrelse
+    marginBottom: 5, // Avstand under teksten
+  },
+
+  // Stil for reserveringsknappen
   reserveButton: {
-    backgroundColor: "#56d141",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
+    backgroundColor: "#56d141", // Grønn bakgrunn
+    padding: 10, // Indre mellomrom
+    borderRadius: 5, // Runde hjørner
+    alignItems: "center", // Sentrerer teksten i knappen
   },
-  buttonText: { color: "#fff", fontWeight: "bold" },
-  loadingText: { textAlign: "center", fontSize: 18, marginTop: 20 },
+
+  // Stil for tekst på knappen
+  buttonText: {
+    color: "#fff", // Hvit tekst
+    fontWeight: "bold", // Fet tekst
+  },
+
+  // Stil for tekst som vises under lasting
+  loadingText: {
+    textAlign: "center", // Sentrerer teksten horisontalt
+    fontSize: 18, // Skriftstørrelse
+    marginTop: 20, // Avstand fra toppen
+  },
 });
+
+
+
 
 export default BedriftMap;

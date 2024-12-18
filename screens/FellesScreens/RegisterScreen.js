@@ -94,7 +94,7 @@ const RegisterScreen = ({ navigation }) => { // Registreringsskjerm
           onChangeText={setPassword}
         />
     {/* Knapper for valg av brukertype */}
-        <View style={styles.buttonRow}>
+        <View style={styles.buttonRow}> 
           <TouchableOpacity
             style={[
               styles.optionButton,
@@ -116,7 +116,7 @@ const RegisterScreen = ({ navigation }) => { // Registreringsskjerm
         </View>
 
         {/* Dropdown for bedrift */}
-        {userType === "BEDRIFT" && (
+        {userType === "BEDRIFT" && ( // Vis dropdown for bedrift hvis bruker er bedrift
           <View style={styles.pickerContainer}>
             <Text style={styles.pickerLabel}>Velg bedrift:</Text>
             <Picker
@@ -133,7 +133,7 @@ const RegisterScreen = ({ navigation }) => { // Registreringsskjerm
         )}
 
         <Text style={styles.selectionInfo}>
-          {userType === "PRIVATPERSON"
+          {userType === "PRIVATPERSON" // Vis informasjon om valgt brukertype
             ? "Du oppretter en konto som privatperson."
             : "Du oppretter en konto som bedrift."}
         </Text>
@@ -147,88 +147,121 @@ const RegisterScreen = ({ navigation }) => { // Registreringsskjerm
 };
 
 const styles = StyleSheet.create({
+  // Hovedcontainer for skjermen
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1, // Fyller hele skjermen
+    backgroundColor: "#fff", // Hvit bakgrunn
+    justifyContent: "center", // Sentrerer innhold vertikalt
+    alignItems: "center", // Sentrerer innhold horisontalt
   },
+
+  // Container for logoen
   logoContainer: {
-    marginBottom: 30,
+    marginBottom: 30, // Avstand under logoen
   },
+
+  // Tekststil for logoen
   logoText: {
-    fontSize: 48,
-    fontWeight: "bold",
-    color: "#82B366",
+    fontSize: 48, // Stor skriftstørrelse
+    fontWeight: "bold", // Fet tekst
+    color: "#82B366", // Grønn farge
   },
+
+  // Stil for tittelteksten
   titleText: {
-    color: "#7D8B75",
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 20,
+    color: "#7D8B75", // Mørk grønn tekst
+    fontSize: 14, // Mindre skriftstørrelse
+    fontWeight: "bold", // Fet tekst
+    marginBottom: 20, // Avstand under teksten
   },
+
+  // Container for skjemaet
   formContainer: {
-    width: "90%",
+    width: "90%", // Fyller 90% av skjermens bredde
   },
+
+  // Stil for inputfeltene
   input: {
-    backgroundColor: "#f5f5f5",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-    fontSize: 16,
+    backgroundColor: "#f5f5f5", // Lys grå bakgrunn
+    padding: 12, // Indre mellomrom
+    borderRadius: 8, // Myke hjørner
+    marginBottom: 10, // Avstand under hvert inputfelt
+    fontSize: 16, // Skriftstørrelse
   },
+
+  // Raden som holder alternativknappene
   buttonRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
+    flexDirection: "row", // Plasserer knappene horisontalt
+    justifyContent: "space-between", // Plass mellom knappene
+    marginBottom: 20, // Avstand under raden
   },
+
+  // Stil for alternativknappene
   optionButton: {
-    flex: 1,
-    backgroundColor: "#4A8C4B",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginHorizontal: 5,
+    flex: 1, // Fordeler plass likt mellom knappene
+    backgroundColor: "#4A8C4B", // Mørk grønn farge
+    padding: 15, // Indre mellomrom
+    borderRadius: 8, // Myke hjørner
+    alignItems: "center", // Sentrerer tekst horisontalt
+    marginHorizontal: 5, // Mellomrom på sidene
   },
+
+  // Stil for aktivert alternativknapp
   optionButtonActive: {
-    backgroundColor: "#82B366",
-    borderWidth: 2,
-    borderColor: "#4A8C4B",
+    backgroundColor: "#82B366", // Lysere grønn farge
+    borderWidth: 2, // Kantlinje rundt knappen
+    borderColor: "#4A8C4B", // Farge på kantlinjen
   },
+
+  // Tekststil for knappene
   optionText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
+    color: "#fff", // Hvit tekst
+    fontSize: 14, // Skriftstørrelse
+    fontWeight: "bold", // Fet tekst
   },
+
+  // Stil for informasjonsfelt
   selectionInfo: {
-    textAlign: "center",
-    fontSize: 14,
-    color: "#333",
-    marginBottom: 10,
+    textAlign: "center", // Sentrerer teksten
+    fontSize: 14, // Skriftstørrelse
+    color: "#333", // Mørk grå tekst
+    marginBottom: 10, // Avstand under teksten
   },
+
+  // Container for picker (valgkomponent)
   pickerContainer: {
-    marginBottom: 20,
+    marginBottom: 20, // Avstand under pickeren
   },
+
+  // Etikett for picker
   pickerLabel: {
-    fontSize: 14,
-    color: "#7D8B75",
-    marginBottom: 5,
+    fontSize: 14, // Skriftstørrelse
+    color: "#7D8B75", // Mørk grønn tekst
+    marginBottom: 5, // Avstand under etiketten
   },
+
+  // Stil for picker-komponenten
   picker: {
-    backgroundColor: "#f5f5f5",
-    borderRadius: 8,
+    backgroundColor: "#f5f5f5", // Lys grå bakgrunn
+    borderRadius: 8, // Myke hjørner
   },
+
+  // Stil for registreringsknappen
   registerButton: {
-    backgroundColor: "#F6FDF5",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
+    backgroundColor: "#F6FDF5", // Lys grønn bakgrunn
+    padding: 15, // Indre mellomrom
+    borderRadius: 8, // Myke hjørner
+    alignItems: "center", // Sentrerer tekst horisontalt
   },
+
+  // Tekststil for registreringsknappen
   registerText: {
-    color: "#4A8C4B",
-    fontSize: 16,
-    fontWeight: "bold",
+    color: "#4A8C4B", // Mørk grønn tekst
+    fontSize: 16, // Skriftstørrelse
+    fontWeight: "bold", // Fet tekst
   },
 });
+
+
 
 export default RegisterScreen;

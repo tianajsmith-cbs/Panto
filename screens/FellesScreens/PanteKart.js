@@ -86,38 +86,52 @@ export default function PantestasjonMapScreen() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
+  // Hovedcontainer for skjermen
   container: {
-    flex: 1,
-    backgroundColor: "white",
+    flex: 1, // Fyller hele skjermen
+    backgroundColor: "white", // Hvit bakgrunnsfarge
   },
+
+  // Header for skjermen
   header: {
-    alignItems: "center",
-    paddingVertical: 20,
-    backgroundColor: "white",
+    alignItems: "center", // Sentrerer innholdet horisontalt
+    paddingVertical: 20, // Vertikal padding for plass rundt header-innholdet
+    backgroundColor: "white", // Hvit bakgrunn for header
   },
+
+  // Tekststil for hovedteksten i headeren
   headerText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#5b975b",
+    fontSize: 20, // Større font for å fremheve teksten
+    fontWeight: "bold", // Fet skrift
+    color: "#5b975b", // Grønn tekstfarge for å gi et friskt utseende
   },
+
+  // Tekststil for underteksten i headeren
   subHeaderText: {
-    fontSize: 16,
-    color: "black",
+    fontSize: 16, // Medium fontstørrelse
+    color: "black", // Sort tekstfarge for kontrast
   },
+
+  // Stil for kartet
   map: {
-    flex: 1,
-    width: "100%",
+    flex: 1, // Kartet skal fylle tilgjengelig plass
+    width: "100%", // Tar opp hele bredden av skjermen
   },
+
+  // Container som vises under lasting
   loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
+    flex: 1, // Fyller hele skjermen
+    justifyContent: "center", // Sentrerer innholdet vertikalt
+    alignItems: "center", // Sentrerer innholdet horisontalt
+    backgroundColor: "white", // Hvit bakgrunn for en ren skjerm
   },
+
+  // Tekststil for lastemeldingen
   loadingText: {
-    fontSize: 18,
-    color: "#5b975b",
+    fontSize: 18, // Relativt stor tekst for å være lett synlig
+    color: "#5b975b", // Grønn farge som matcher headeren
   },
 });
+
+

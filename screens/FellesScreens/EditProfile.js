@@ -104,29 +104,55 @@ const EditProfile = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#FFFFFF" },
-  title: { fontSize: 22, fontWeight: "bold", color: "#5b975b", marginBottom: 20 },
+  // Hovedcontainer for skjermen
+  container: {
+    flex: 1, // Fyller hele skjermen
+    padding: 20, // Innvendig padding
+    backgroundColor: "#FFFFFF", // Hvit bakgrunn
+  },
+
+  // Tittelstil
+  title: {
+    fontSize: 22, // Fontstørrelse
+    fontWeight: "bold", // Fet skrift
+    color: "#5b975b", // Grønn farge
+    marginBottom: 20, // Avstand under tittelen
+  },
+
+  // Stil for tekstinnhold/inputfelt
   input: {
-    backgroundColor: "#f5f5f5",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 15,
-    fontSize: 16,
+    backgroundColor: "#f5f5f5", // Lys grå bakgrunn
+    padding: 12, // Innvendig padding
+    borderRadius: 8, // Runde hjørner
+    marginBottom: 15, // Avstand under elementet
+    fontSize: 16, // Fontstørrelse
   },
+
+  // Stil for "Lagre"-knappen
   saveButton: {
-    backgroundColor: "#56d141",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginBottom: 15,
+    backgroundColor: "#56d141", // Grønn bakgrunnsfarge
+    padding: 15, // Innvendig padding
+    borderRadius: 8, // Runde hjørner
+    alignItems: "center", // Sentrerer innholdet horisontalt
+    marginBottom: 15, // Avstand under knappen
   },
+
+  // Stil for "Slett"-knappen
   deleteButton: {
-    backgroundColor: "#e74c3c",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
+    backgroundColor: "#e74c3c", // Rød bakgrunnsfarge
+    padding: 15, // Innvendig padding
+    borderRadius: 8, // Runde hjørner
+    alignItems: "center", // Sentrerer innholdet horisontalt
   },
-  buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+
+  // Stil for teksten i knappene
+  buttonText: {
+    color: "#fff", // Hvit tekstfarge
+    fontSize: 16, // Fontstørrelse
+    fontWeight: "bold", // Fet skrift
+  },
 });
+
+
 
 export default EditProfile;

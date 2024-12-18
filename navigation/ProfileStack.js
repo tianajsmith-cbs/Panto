@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; // Importerer React fra react
 import { createStackNavigator } from "@react-navigation/stack"; // Importerer createStackNavigator fra @react-navigation/stack
 import ProfileScreen from "../screens/FellesScreens/Profil"; // Importerer ProfileScreen fra Profil.js
 import EditProfile from "../screens/FellesScreens/EditProfile"; //  Importerer EditProfile fra EditProfile.js

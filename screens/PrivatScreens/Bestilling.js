@@ -38,29 +38,29 @@ const Bestilling = () => {
         return;
       }
       const currentLocation = await Location.getCurrentPositionAsync({}); // Henter gjeldende posisjon
-      setLocation({
-        latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude,
+      setLocation({   // Setter lokasjon
+        latitude: currentLocation.coords.latitude,  // Breddegrad
+        longitude: currentLocation.coords.longitude, // Lengdegrad
       });
-      setLoading(false);
+      setLoading(false); // Slutter å laste
     })();
   }, []);
 
   const handleConfirmDate = (event, selectedDate) => { // Håndterer valgt dato
-    setShowDatePicker(false);
-    if (selectedDate) {
-      setDate(selectedDate);
+    setShowDatePicker(false); // Lukker datepicker
+    if (selectedDate) { // Sjekker om dato er valgt
+      setDate(selectedDate); // Setter valgt dato
     }
   };
 
   const handleMapPress = (event) => { // Håndterer trykk på kartet
-    const { latitude, longitude } = event.nativeEvent.coordinate;
-    setLocation({ latitude, longitude });
+    const { latitude, longitude } = event.nativeEvent.coordinate; // Henter koordinater
+    setLocation({ latitude, longitude }); // Setter henteposisjon
   };
 
   const fetchCurrentLocation = async () => { // Henter gjeldende posisjon på nytt
     try {
-      const currentLocation = await Location.getCurrentPositionAsync({}); 
+      const currentLocation = await Location.getCurrentPositionAsync({});  
       setLocation({
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
@@ -231,27 +231,127 @@ const Bestilling = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "white" },
-  inner: { flexGrow: 1, padding: 20 },
-  title: { fontSize: 24, fontWeight: "bold", color: "#5b975b", textAlign: "center", marginBottom: 20 },
-  datePickerButton: { backgroundColor: "#eaf5e3", padding: 15, borderRadius: 10, marginBottom: 20 },
-  datePickerText: { fontSize: 16, color: "#5b975b", textAlign: "center" },
-  modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
-  datePickerModal: { backgroundColor: "white", padding: 20, borderRadius: 10, alignItems: "center" },
-  closeButtonText: { marginTop: 10, fontSize: 16, color: "#007BFF" },
-  inputContainer: { marginBottom: 20 },
-  input: { backgroundColor: "#f5f5f5", padding: 15, borderRadius: 10, marginBottom: 15, fontSize: 16 },
-  submitButton: { backgroundColor: "#56d141", padding: 15, borderRadius: 10, alignItems: "center", marginBottom: 20 },
-  submitButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  mapContainer: { height: 300, marginBottom: 20 },
-  subtitle: { fontSize: 16, color: "#555", marginBottom: 10 },
-  map: { flex: 1, borderRadius: 10 },
-  loadingText: { textAlign: "center", marginTop: 20, fontSize: 16 },
-  donationContainer: { marginBottom: 20 },
-  buttonContainer: { flexDirection: "row", justifyContent: "space-between" },
-  optionButton: { flex: 1, padding: 10, backgroundColor: "#eaf5e3", borderRadius: 10, marginHorizontal: 5, alignItems: "center" },
-  selectedOption: { backgroundColor: "#56d141" },
-  optionText: { color: "#333", fontWeight: "bold" },
+  // Hovedcontainer
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  inner: {
+    flexGrow: 1,
+    padding: 20,
+  },
+
+  // Overskrifter og undertekster
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#5b975b",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#555",
+    marginBottom: 10,
+  },
+
+  // Datovelger
+  datePickerButton: {
+    backgroundColor: "#eaf5e3",
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  datePickerText: {
+    fontSize: 16,
+    color: "#5b975b",
+    textAlign: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  datePickerModal: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#007BFF",
+  },
+
+  // Inputfelt
+  inputContainer: {
+    marginBottom: 20,
+  },
+  input: {
+    backgroundColor: "#f5f5f5",
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+    fontSize: 16,
+  },
+
+  // Knapp: Send bestilling
+  submitButton: {
+    backgroundColor: "#56d141",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  // Kartvisning
+  mapContainer: {
+    height: 300,
+    marginBottom: 20,
+  },
+  map: {
+    flex: 1,
+    borderRadius: 10,
+  },
+  loadingText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+  },
+
+  // Donasjonvalg
+  donationContainer: {
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  optionButton: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#eaf5e3",
+    borderRadius: 10,
+    marginHorizontal: 5,
+    alignItems: "center",
+  },
+  selectedOption: {
+    backgroundColor: "#56d141",
+  },
+  optionText: {
+    color: "#333",
+    fontWeight: "bold",
+  },
 });
+
+
+
 
 export default Bestilling;
